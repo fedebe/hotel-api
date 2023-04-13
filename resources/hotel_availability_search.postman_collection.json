@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "83a850ea-50ca-481e-befe-83cfcfc0d3f5",
+		"name": "Hotel availability search",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12799410"
+	},
+	"item": [
+		{
+			"name": "Count by Search Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/count/:searchId",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"count",
+						":searchId"
+					],
+					"variable": [
+						{
+							"key": "searchId",
+							"value": "24949afb-14b0-42d2-a622-a28d040add62"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Hotel Availability",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"hotelId\": \"234234dsf\",\n    \"checkIn\": \"29/12/2023\",\n    \"checkOut\": \"31/12/2023\",\n    \"ages\": [3, 29, 30, 1]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/search",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"search"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
