@@ -1,7 +1,7 @@
 package com.api.hotelsearch.domain;
 
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.util.List;
 
 import org.hibernate.annotations.Type;
 import io.hypersistence.utils.hibernate.type.array.IntArrayType;
@@ -11,11 +11,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
 
 @Entity
-@Table(name = "HOTEL_SEARCH")
+@Table(name = "HOTEL_SEARCH", indexes = {
+        @Index(name = "HOTEL_SEARCH_ID", columnList = "id", unique = true),
+        @Index(name = "HOTEL_SEARCH_SEARCH_ID", columnList = "search_id", unique = true),
+        @Index(name = "HOTEL_SEARCH_HOTEL_ID", columnList = "hotel_id"),
+        @Index(name = "MULT_INDEX", columnList = "hotel_id, check_in, check_out, ages")
+      })
 public class HotelSearchDAO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,12 +49,12 @@ public class HotelSearchDAO {
     
     public HotelSearchDAO() {}
 
-    public HotelSearchDAO(String searchId, String hotelId, LocalDate checkin, LocalDate checkout, Integer[] ages) {
+    public HotelSearchDAO(String searchId, String hotelId, LocalDate checkin, LocalDate checkout, List<Integer> ages) {
         this.searchId = searchId;
         this.hotelId = hotelId;
         this.checkin = checkin;
         this.checkout = checkout;
-        this.ages = Arrays.stream(ages).mapToInt(Integer::intValue).toArray();
+        this.ages = ages.stream().mapToInt(Integer::intValue).toArray();
     }
 
     public String getSearchId() {
@@ -86,7 +92,7 @@ public class HotelSearchDAO {
     public int[] getAges() {
         return ages;
     }
-
+    
     public void setAges(int[] ages) {
         this.ages = ages;
     }

@@ -32,9 +32,15 @@ public class KafkaConsumerConfiguration {
     public Map<String, Object> consumerConfigurations() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaAddress);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "groupId");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "hotels-batch-consumer");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, "com.api.hotelavailability.model.HotelSearch");
+        props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, 5000);
+        props.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 5000);
+        props.put(ConsumerConfig.FETCH_MIN_BYTES_CONFIG, 5000);
+        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 10);
+
         return props;
     }
 
@@ -42,6 +48,9 @@ public class KafkaConsumerConfiguration {
     public ConcurrentKafkaListenerContainerFactory<String, HotelSearch> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, HotelSearch> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
+        factory.setBatchListener(true);
+        factory.setConcurrency(1);
         return factory;
     }
+
 }

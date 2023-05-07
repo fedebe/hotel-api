@@ -15,8 +15,6 @@ public class HotelSearchValidDatesValidator implements ConstraintValidator<Valid
     @Override
     public boolean isValid(HotelSearch hotelSearch, ConstraintValidatorContext context) {
         
-//        if(hotelSearch.checkIn() != null && hotelSearch.checkOut() != null)
-        
         return hotelSearch.checkIn() != null && hotelSearch.checkOut() != null && (
                hotelSearch.checkIn().isBefore(hotelSearch.checkOut()) || 
                hotelSearch.checkIn().isEqual(hotelSearch.checkOut()));

@@ -1,14 +1,12 @@
 package com.api.hotelsearch.service.impl;
 
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import com.api.hotelsearch.exception.MessagesProducerServiceException;
 import com.api.hotelsearch.model.HotelSearch;
 import com.api.hotelsearch.service.MessagesProducerService;
 
@@ -26,12 +24,9 @@ public class MessagesProducerServiceImpl implements MessagesProducerService {
     }
 
     @Override
-    public void send(UUID key, HotelSearch hotelSearch) throws MessagesProducerServiceException {
-        try {
-            kafkaTemplate.send(topicName, key.toString(), hotelSearch).get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new MessagesProducerServiceException(e);
-        }
+    public void send(final UUID key, final HotelSearch hotelSearch) {
+            kafkaTemplate.send(topicName, key.toString(), hotelSearch);
+      
     }
 
 }

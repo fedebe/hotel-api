@@ -1,6 +1,8 @@
 package com.api.hotelsearch.service.impl;
 
+import java.util.Arrays;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +29,7 @@ public class HotelSearchServiceImpl implements HotelSearchService {
     }
 
     @Override
-    public HotelSearchId search(HotelSearch hotelSearch) {
+    public HotelSearchId search(final HotelSearch hotelSearch) {
         UUID key = UUID.randomUUID();
         
         queueService.send(key, hotelSearch);
@@ -36,9 +38,8 @@ public class HotelSearchServiceImpl implements HotelSearchService {
     }
 
     @Override
-    public HotelSearchCount count(HotelSearchId hotelSearchId) throws HotelSearchDoesNotExistException {
+    public HotelSearchCount count(final HotelSearchId hotelSearchId) throws HotelSearchDoesNotExistException {
         HotelSearchDAO hotelSearch = getHotelSearchDAO(hotelSearchId);
-
         Long count = hotelSearchRepository.countByHotelIdAndCheckinAndCheckoutAndAges(hotelSearch.getHotelId(),
                 hotelSearch.getCheckin(), hotelSearch.getCheckout(), hotelSearch.getAges());
 
@@ -46,13 +47,13 @@ public class HotelSearchServiceImpl implements HotelSearchService {
                                                                  new HotelSearch(hotelSearch.getHotelId(), 
                                                                                  hotelSearch.getCheckin(), 
                                                                                  hotelSearch.getCheckout(),
-                                                                                 hotelSearch.getAges()), 
+                                                                                 Arrays.stream(hotelSearch.getAges()).boxed().collect(Collectors.toList())), 
                                                                                  count);
 
         return hotelSearchCount;
     }
 
-    private HotelSearchDAO getHotelSearchDAO(HotelSearchId hotelSearchId) {
+    private HotelSearchDAO getHotelSearchDAO(final HotelSearchId hotelSearchId) {
         return hotelSearchRepository
                 .findBySearchId(hotelSearchId.searchId())
                 .orElseThrow(() -> new HotelSearchDoesNotExistException(hotelSearchId.searchId()));

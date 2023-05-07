@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.api.hotelsearch.exception.HotelSearchDoesNotExistException;
-import com.api.hotelsearch.exception.MessagesProducerServiceException;
 import com.api.hotelsearch.model.ErrorInfo;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
@@ -52,18 +51,6 @@ public class ExceptionHandlerController {
         ErrorInfo errorInfo = new ErrorInfo(errorMessages.toArray(String[]::new), HttpStatus.BAD_REQUEST.value(), request.getRequestURI());
         
         return new ResponseEntity<>(errorInfo, HttpStatus.BAD_REQUEST);
-    }
-    
-    @ExceptionHandler(MessagesProducerServiceException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ErrorInfo> httpMessageNotReadableException(HttpServletRequest request, MessagesProducerServiceException e) {
-        List<String> errorMessages = new ArrayList<>();
-        
-        errorMessages.add(e.getMessage());
-        
-        ErrorInfo errorInfo = new ErrorInfo(errorMessages.toArray(String[]::new), HttpStatus.INTERNAL_SERVER_ERROR.value(), request.getRequestURI());
-        
-        return new ResponseEntity<>(errorInfo, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     
     @ExceptionHandler(HotelSearchDoesNotExistException.class)

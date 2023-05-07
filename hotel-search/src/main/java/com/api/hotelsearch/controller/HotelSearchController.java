@@ -25,16 +25,14 @@ public class HotelSearchController implements HotelSearchResources {
        }
        
        @PostMapping("/search")
-       public HotelSearchId search(@RequestBody @Valid HotelSearch hotelSearch) {
-           
+       public HotelSearchId search(@RequestBody @Valid final HotelSearch hotelSearch) {
            
            return hotelSearchService.search(hotelSearch);
        }
        
        @GetMapping("/count/{searchId}")
-       public HotelSearchCount count(HotelSearchId hotelSearchId) {
+       public HotelSearchCount count(final HotelSearchId hotelSearchId) {
            
            return hotelSearchService.count(hotelSearchId);
        }
-       
 }

@@ -1,5 +1,9 @@
 package com.api.hotelavailability.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,24 +17,28 @@ import com.api.hotelavailability.service.HotelAvailabilityService;
 public class HotelAvailabilityServiceImpl implements HotelAvailabilityService {
 
     private HotelAvailabilityRepository hotelAvailabilityRepository;
-    
+
     @Autowired
     public HotelAvailabilityServiceImpl(HotelAvailabilityRepository hotelAvailabilityRepository) {
         this.hotelAvailabilityRepository = hotelAvailabilityRepository;
     }
 
     @Override
-    public void search(HotelSearch hotelSearch, String key) throws HotelAvailabilityException {
-        
+    public void searches(Map<String, HotelSearch> hotelSearches) throws HotelAvailabilityException {
         try {
-            HotelSearchDAO hotel = new HotelSearchDAO(key,
-                    hotelSearch.hotelId(),
-                    hotelSearch.checkIn(),
-                    hotelSearch.checkOut(),
-                    hotelSearch.ages());
-            
-            hotelAvailabilityRepository.save(hotel);
-        } catch(Exception e) {
+            List<HotelSearchDAO> searchesToSave = new ArrayList<>();
+
+            for (Map.Entry<String, HotelSearch> hotelSearch : hotelSearches.entrySet()) {
+                HotelSearchDAO hotel = new HotelSearchDAO(hotelSearch.getKey(),
+                        hotelSearch.getValue().hotelId(),
+                        hotelSearch.getValue().checkIn(),
+                        hotelSearch.getValue().checkOut(),
+                        hotelSearch.getValue().ages());
+                searchesToSave.add(hotel);
+            }
+
+            hotelAvailabilityRepository.saveAll(searchesToSave);
+        } catch (Exception e) {
             throw new HotelAvailabilityException(e);
         }
     }

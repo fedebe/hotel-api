@@ -7,8 +7,8 @@ import com.api.hotelsearch.model.HotelSearchId;
 
 public interface HotelSearchService {
     
-    public HotelSearchId search(HotelSearch hotelSearch);
+    public HotelSearchId search(final HotelSearch hotelSearch);
     
-    public HotelSearchCount count(HotelSearchId hotelSearchId) throws HotelSearchDoesNotExistException;
+    public HotelSearchCount count(final HotelSearchId hotelSearchId) throws HotelSearchDoesNotExistException;
     
 }
